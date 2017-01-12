@@ -38,10 +38,10 @@ entry:
     /*memory=0x8200,chs=002*/
     mov $0x820,%ax
     mov %ax,%es
-    mov $0,%bx
-    mov $0,%ch
-    mov $0,%dh
-    mov $2,%cl
+    mov $0,%bx      //es:bx=缓冲地址
+    mov $0,%ch      //柱面0
+    mov $0,%dh      //磁头0
+    mov $2,%cl      //扇区2
     call read
     mov $okmsg,%si
     call puts
@@ -80,13 +80,13 @@ finish:
     ret
 
 msg:
-    .asciz "\r\nOrzorzorzzzzz\n"
+    .asciz "\nOrzorzorzzzzz\n"
 
 okmsg:
-    .asciz "\r\nOkkkkkkkkkk\n"
+    .asciz "Okkkkkkkkkk\n"
 
 errormsg:
-    .asciz "\r\nErrorrrrrrr\n"
+    .asciz "\nErrorrrrrrr\n"
 
 .org 510
 .word 0xaa55
