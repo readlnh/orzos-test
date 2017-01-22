@@ -36,7 +36,7 @@ entry:
     call puts
 
     /*memory=0x8200,chs=002*/
-    mov $0x820,%ax
+    mov $0x800,%ax
     mov %ax,%es
     mov $0,%bx      //es:bx=缓冲地址
     
@@ -51,7 +51,7 @@ readloop:
 
     /*把内存地址后移0x200*/
     mov %es,%ax
-    mov $0x0020,%ax
+    add $0x0020,%ax
     mov %ax,%es
 
     /*循环计数，一直读64次，cl<=63继续读*/
@@ -67,7 +67,7 @@ readloop:
 
     /*读出内存中ds:bx=0x34ff:0xf的数据到寄存器cl,与0xaa做比较，
       如果相等，则说明读取u盘中的数据到内存没有问题，可以进行下一步了。*/
-    push %ds
+    /*push %ds
     mov $0x34ff,%ax;
     mov %ax,%ds
     mov $0xf,%bx
@@ -76,16 +76,10 @@ readloop:
     pop %ds //恢复ds
     cmp $0xaa,%cl
     je usbok
-    
     mov $errorusbmsg,%si
-    call puts
+    call puts*/
 
 loop:
-    jmp loop
-
-usbok:
-    mov $msgusb,%si
-    call puts
     jmp loop
 
 read:
@@ -113,6 +107,11 @@ over:
 
 error:
     mov $errormsg,%si
+    call puts
+    jmp loop
+
+usbok:
+    mov $msgusb,%si
     call puts
     jmp loop
     

@@ -11,12 +11,14 @@ $(boot):$(orz.S)
 	ld -m elf_i386 $(obj) -e start -Ttext 0x7c00 -o $(elf)
 	objcopy -S -O binary -j .text $(elf)  $(boot)
 	objdump -S $(elf) > $(asm)
-fat12:
+fat12:$(boot)
 	@dd if=/dev/zero of=$(boot) seek=2 count=2878 >> /dev/zero
 	@ls -al $(boot)
+	sudo mount -o loop $(boot) /mnt
+	sudo umount /mnt
 
 run:$(asm)
-	qemu-system-i386 -fda $(boot)
+	qemu-system-i386 -drive file=$(boot)
 
 writeusb:
 	sudo dd if=$(boot) of=/dev/sdc4
